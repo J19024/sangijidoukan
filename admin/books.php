@@ -1,9 +1,7 @@
-<?php 
+<?php require('login-check.php');?>
+<?php
 // エラーを出力させない
 ini_set('display_errors', "Off");
-
-session_start();
-require('../dbconnect.php');
 if (!empty($_POST)) {
 	// エラー項目の確認
 	if ($_POST['title'] == '') {
@@ -12,49 +10,42 @@ if (!empty($_POST)) {
 	if ($_POST['age'] == '') {
 		$error['age'] = 'blank';
     }
-	if ($_POST['pict_path'] == '') {
-		$error['pict_path'] = 'blank';
-    }
-	$fileName = $_FILES['image']['name'];
-	if (!empty($fileName)) {
-		$ext = substr($fileName, -4);
-		if ($ext != '*jpg' && $ext != 'jpeg') {
-			$error['image'] = 'type';
-		}
-	}
-	$fileName = $_FILES['image']['name'];
+	$fileName = $_FILES['piture']['name'];
 	if (!empty($fileName)) {
 		$ext = substr($fileName, -3);
+		if ($ext != 'jpg' && $ext != 'png') {
+			$error['pict'] = 'type';
+		}
+	}
+	$fileName2 = $_FILES['pdf']['name'];
+	if (!empty($fileName2)) {
+		$ext = substr($fileName2, -3);
 		if ($ext != 'pdf') {
-			$error['image'] = 'type';
+			$error['pdf'] = 'type2';
 		}
-	}
-	// 重複アカウントのチェック
-	if (empty($error)) {
-		$member = $db->prepare('SELECT COUNT(*) AS cnt FROM members WHERE email=?');
-		$member->execute(array($_POST['email']));
-		$record = $member->fetch();
-		if (@$record['cnt'] > 0) {
-			$error['email'] = 'duplicate';
-		}
-	}
-    //データの扱いがよくわかっていない
-	if (empty($error)) {
-		// 画像をアップロードする
-		$image = date('YmdHis') . $_FILES['image']['name'];
-		move_uploaded_file($_FILES['image']['tmp_name'], '../member_picture/' . $image);
-		
-		$_SESSION['join'] = $_POST;
-		$_SESSION['join']['image'] = $image;
-        header('Location: check.php'); 
+    } 
+    if(empty($error)){
+        //画像をアップロードする
+        $pict = date('YmdHis').$_FILES['pict']['name'];
+            move_uploaded_file($_FILES['pict']['tmp_name'], '../pict/'.$pict);
+        //PDFをアップロードする
+        $pdf = date('YmdHis').$_FILES['pdf']['name'];
+            move_uploaded_file($_FILES['pdf']['tmp_name'], '../pdf/'.$pdf);
+        //セッションに各値を保存する
+        $_SESSION['join'] = $_POST;
+        $_SESSION['join']['pict'] = $pict;
+        $_SESSION['join']['pdf'] = $pdf;
+        //books_join_check.phpに移動する
+        header('Location: books_join_check.php');
         exit();
-	}
+    }
 }
+   
 ?>
 <!DOCTYPE html>
 <body>
     <p>追加する書籍のデータを入力してください。</p>
-    <from action="" method="post" enctype="multipart/form-data">
+    <form action="" method="post" enctype="multipart/form-data">
         <dl>
             <!--本情報の登録-->
             <dt>タイトル<span class="required">必須</span></dt>
@@ -106,32 +97,34 @@ if (!empty($_POST)) {
                  value="<?php echo htmlspecialchars($_POST["genre"], ENT_QUOTES); ?>"
                 />
             </dd>
-
             <dt>表紙画像<span class="required">必須</span></dt>
-            <dd><input type="file" name="pict_path" size="255"
-                 value="<?php echo htmlspecialchars($_POST["pict_path"], ENT_QUOTES); ?>"
-                />
+            <dd>
+                <input class="registerFile" type="file" name="pict" required>
+                <?php if($error['pict'] == 'type1'): ?>
+                    <p class="error">画像は「.jpg」または「.png」を指定してください</p>
+      			<?php endif; ?>
             </dd>
-
             <dt>書籍PDF<span class="required">必須</span></dt>
-            <dd><input type="file" name="pdf_path" size="255"
-                 value="<?php echo htmlspecialchars($_POST["pdf_path"], ENT_QUOTES); ?>"
-                />
+            <dd>
+                <input class="registerFile" type="file" name="pdf" required>
+                <?php if($error['pdf'] == 'type2'): ?>
+                    <p class="error">画像は「.pdf」を指定してください</p>
+      			<?php endif; ?>
             </dd>
         </dl>
         <div><input type="submit" value="入力内容を確認する" /></div>
-    </from>
+    </form>
     <!--ここから本情報の表示-->
      <!--データの扱いが分かっていないため動作未確認-->
     <?php
         foreach ($posts as $post):
     ?>
     <div class="itiran">
-        <img src="pict_path/<?php echo h($post['pict_path']); ?>" width="48" height="48" alt="<?php echo h($post['title']); ?>" />
-        <p><span class="title"><?php echo h($post['title']); ?></span></p>
-        <p class="info">[<a href="update.php?id=<?php echo h($post['id']); ?>"> 詳細</a>]</p>
-        <p class="update">[<a href="view.php?id=<?php echo h($post['id']); ?>"> 編集</a>]</p>
-        <p class="delete">[<a href="delete.php?id=<?php echo h($post['id']); ?>">　削除</a>]</p>
+        <img src="pict_path/<?php echo $post['pict_path']; ?>" width="48" height="48" alt="<?php echo $post['title']; ?>" />
+        <p><span class="title"><?php echo $post['title']; ?></span></p>
+        <p class="info">[<a href="update.php?id=<?php echo $post['id']; ?>"> 詳細</a>]</p>
+        <p class="update">[<a href="view.php?id=<?php echo $post['id']; ?>"> 編集</a>]</p>
+        <p class="delete">[<a href="delete.php?id=<?php echo $post['id']; ?>"> 削除</a>]</p>
     </div>
     <?php
         endforeach;
