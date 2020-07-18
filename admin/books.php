@@ -40,7 +40,10 @@ if (!empty($_POST)) {
         exit();
     }
 }
-   
+if ($_REQUEST["action"] == "rewrite") {
+    $_POST = $_SESSION["join"];
+    $error["rewrite"] = true;
+}
 ?>
 <!DOCTYPE html>
 <body>
@@ -71,7 +74,7 @@ if (!empty($_POST)) {
             </dd>
             
             <dt>説明文<span class="required"></span></dt>
-            <dd><input type="text" name="explanation" size="35" maxlength="255"
+            <dd><input type="text" name="explanation" size="85" maxlength="255"
                  value="<?php echo htmlspecialchars($_POST["explanation"], ENT_QUOTES); ?>"
                 />
             </dd>
@@ -85,7 +88,7 @@ if (!empty($_POST)) {
             <dt>対象年齢<span class="required">必須</span></dt>
             <dd>
                 <input type="text" name="age" size="35" maxlength="2" 
-                 value="<?php echo htmlspecialchars($_POST["age"], ENT_QUOTES); ?>"
+                 value="<?php echo htmlspecialchars($_POST['age'], ENT_QUOTES); ?>" placeholder="4〜6歳"
                 />
                 <?php if ($error["age"] == "blank"): ?>
                 <p class ="error">*対象年齢を入力してください。</p>
