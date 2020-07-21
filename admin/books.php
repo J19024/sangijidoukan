@@ -1,5 +1,5 @@
-<?php require('login-check.php');
-
+<?php require('login-check.php');?>
+<?php
 // エラーを出力させない
 ini_set('display_errors', "Off");
 if (!empty($_POST)) {
@@ -40,11 +40,7 @@ if (!empty($_POST)) {
         exit();
     }
 }
-if ($_REQUEST["action"] == "rewrite") {
-    $_POST = $_SESSION["join"];
-    $error["rewrite"] = true;
-}
-$posts = $db->query('SELECT id, title, pict_path FROM books ORDER BY id ASC');
+   
 ?>
 <!DOCTYPE html>
 <body>
@@ -75,7 +71,7 @@ $posts = $db->query('SELECT id, title, pict_path FROM books ORDER BY id ASC');
             </dd>
             
             <dt>説明文<span class="required"></span></dt>
-            <dd><input type="text" name="explanation" size="85" maxlength="255"
+            <dd><input type="text" name="explanation" size="35" maxlength="255"
                  value="<?php echo htmlspecialchars($_POST["explanation"], ENT_QUOTES); ?>"
                 />
             </dd>
@@ -89,7 +85,7 @@ $posts = $db->query('SELECT id, title, pict_path FROM books ORDER BY id ASC');
             <dt>対象年齢<span class="required">必須</span></dt>
             <dd>
                 <input type="text" name="age" size="35" maxlength="2" 
-                 value="<?php echo htmlspecialchars($_POST['age'], ENT_QUOTES); ?>" placeholder="4〜6歳"
+                 value="<?php echo htmlspecialchars($_POST["age"], ENT_QUOTES); ?>"
                 />
                 <?php if ($error["age"] == "blank"): ?>
                 <p class ="error">*対象年齢を入力してください。</p>
@@ -119,15 +115,16 @@ $posts = $db->query('SELECT id, title, pict_path FROM books ORDER BY id ASC');
         <div><input type="submit" value="入力内容を確認する" /></div>
     </form>
     <!--ここから本情報の表示-->
+     <!--データの扱いが分かっていないため動作未確認-->
     <?php
         foreach ($posts as $post):
     ?>
-    <div>
-        <img src="../pict/<?php echo $post['pict_path']; ?>" width="48" height="64" alt="<?php echo $post['title']; ?>" />
-        <p><span><?php echo $post['title']; ?></span></p>
-        <p>[<a href="view.php?id=<?php echo $post['id']; ?>"> 詳細</a>]</p>
-        <p>[<a href="update.php?id=<?php echo $post['id']; ?>"> 編集</a>]</p>
-        <p>[<a href="delete.php?id=<?php echo $post['id']; ?>"> 削除</a>]</p>
+    <div class="itiran">
+        <img src="pict_path/<?php echo $post['pict_path']; ?>" width="48" height="48" alt="<?php echo $post['title']; ?>" />
+        <p><span class="title"><?php echo $post['title']; ?></span></p>
+        <p class="info">[<a href="update.php?id=<?php echo $post['id']; ?>"> 詳細</a>]</p>
+        <p class="update">[<a href="view.php?id=<?php echo $post['id']; ?>"> 編集</a>]</p>
+        <p class="delete">[<a href="delete.php?id=<?php echo $post['id']; ?>"> 削除</a>]</p>
     </div>
     <?php
         endforeach;

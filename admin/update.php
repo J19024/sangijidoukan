@@ -115,7 +115,7 @@
             </dd>
         </dl>
         <div>
-            <input class="registerButton" type="button" value="トップに戻る" onclick="location.href='books.php'">&nbsp;
+            <input type="button" value="トップに戻る" onclick="location.href='books.php'">&nbsp;
             <input type="submit" value="入力内容を確認する" />
         </div>
     </form>
