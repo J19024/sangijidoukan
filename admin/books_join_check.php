@@ -8,7 +8,7 @@
         header('Location: books.php');
         exit();
     }
-    
+    //DBに値を格納する
     if (!empty($_POST)){
         $statement = $db->prepare("INSERT INTO books SET title=?, author=?, publication=?, explanation=?, publisher=?,
                                     age=?, pict_path=?, pdf_path=?, genre=?, created=NOW(), updated=NOW()");

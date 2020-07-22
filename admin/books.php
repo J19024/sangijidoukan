@@ -41,6 +41,7 @@ if (!empty($_POST)) {
     }
 }
    
+$posts = $db->query('SELECT id, title, pict_path FROM books ORDER BY id ASC');
 ?>
 <!DOCTYPE html>
 <body>
