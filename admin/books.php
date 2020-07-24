@@ -40,10 +40,14 @@ if (!empty($_POST)) {
         exit();
     }
 }
+   
+$posts = $db->query('SELECT id, title, pict_path FROM books ORDER BY id ASC');
+=======
 if ($_REQUEST["action"] == "rewrite") {
     $_POST = $_SESSION["join"];
     $error["rewrite"] = true;
 }
+
 ?>
 <!DOCTYPE html>
 <body>
