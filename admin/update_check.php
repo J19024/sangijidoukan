@@ -1,4 +1,5 @@
-<?php
+<?php require('login-check.php');
+
     // エラーを出力させない
     ini_set('display_errors', "Off");
     session_start();

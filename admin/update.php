@@ -53,6 +53,7 @@
         $error["rewrite"] = true;
     }
 ?>
+<!DOCTYPE html>
     <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="id" value="<?php echo $id; ?>">
         <dl>
