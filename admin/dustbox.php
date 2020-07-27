@@ -11,7 +11,6 @@ if (isset($_POST['rest'])){
     header('Location: rest_check.php');
     exit();
 }elseif(isset($_POST['delete'])){
-    $_SESSION['delete'] = $_POST;
     $_SESSION["delete"] = $_POST["check"];
     header('Location: delete_check.php');
     exit();
