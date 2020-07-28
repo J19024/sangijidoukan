@@ -7,6 +7,9 @@
     $books = $db->prepare('SELECT * FROM books WHERE id=?');
     $books->execute(array($id));
     $book = $books->fetch();
+  }else{
+    header('Location: books.php');
+    exit();
   }
 
     if (!empty($_POST)) {
