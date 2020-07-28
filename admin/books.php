@@ -59,6 +59,9 @@ if ($_REQUEST["action"] == "rewrite") {
 }
 ?>
 <!DOCTYPE html>
+<head>
+    
+</head>
 <body>
     <input  type="button" value="ゴミ箱へ" onclick="location.href='dustbox.php'">
     <p>追加する書籍のデータを入力してください。</p>
