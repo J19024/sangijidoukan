@@ -14,25 +14,81 @@
     $genres = $db->query('SELECT * FROM genre WHERE genre_id NOT IN (1)');
 ?>
 <!DOCTYPE html>
-    <h1><?php echo $_REQUEST["id"];?></h1>
+<head>
+<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+<style>
+.center {
+  width:auto;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+</style>
+<body>
     <body>
-        <form action="" method="post">
-            <dl>
-                <?php foreach($genres as $genre): ?>
-                    <input type="button" name="genre" value="<?php echo $genre["genre_name"]; ?>" 
-                        onclick="location.href='index.php?id=<?php echo $genre['genre_id']; ?>'"/><br>
-                <?php endforeach; ?>
-                    <input type="button" name="genre" value="リセット" 
-                        onclick="location.href='index.php'"/><br>
-            </dl>
-        </form>
+    <div id="app">
+    <v-app>
+        <v-card width="750px" class="mx-auto mt-5">
+        <v-card-title>ジャンル選択</v-card-title>
+            <form action="" method="post">
+                    <v-row>
+                    <?php foreach($genres as $genre): ?>
+                        <v-col>
+                        <v-btn name="genre" 
+                            onclick="location.href='index.php?id=<?php echo $genre['genre_id']; ?>'"/>
+                            <?php echo $genre["genre_name"]; ?>
+                        </v-btn>
+                        </v-col>
+                    <?php endforeach; ?>
+                    </v-row>
+                    <v-row>
+                    <v-col>
+                        <v-btn name="genre" value="リセット"  color="error"
+                            onclick="location.href='index.php'"/>
+                        リセット
+                        </v-btn>
+                    </v-col>
+                    </v-row>
+            </form>
+        </v-card>
         <div>
             <?php foreach ($posts as $post): ?>
-                <div>
+                <div class="center">
+                    <v-card
+                        class="mx-auto"
+                        max-width="400"
+                    >
                     <a href="../pdf/<?php echo $post['pdf_path'];?>">
-                        <img src="../pict/<?php echo $post['pict_path']; ?>" width="48" height="48" alt="<?php echo $post['title']; ?>" />
+                        <v-img
+                        class="white--text align-end"
+                        height="auto"
+                        src="../pict/<?php echo $post['pict_path']; ?>" 
+                        >
                     </a>
-                    <p><span class="title"><?php echo $post['title']; ?></span></p>
+                        <v-card-title><?php echo $post['title']; ?></v-card-title>
+                        </v-img>
+
+                    </v-card>
+                    </div>
             <?php endforeach; ?>
         </div>
+        </v-app>
+        </div>
+        
 </body>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+<link rel='stylesheet' href='https://unpkg.com/v-calendar/lib/v-calendar.min.css'>
+<script src='https://unpkg.com/v-calendar'></script>
+<script>
+    new Vue({
+      el: '#app',
+      vuetify: new Vuetify(),
+    })
+</script>
+</html>
