@@ -26,7 +26,7 @@
             $_SESSION['join']['id']
         ));
         unset($_SESSION['join']);
-    
+        $_SESSION['update'] = "編集が完了しました。";
         header('Location: books.php');
         exit();
     }

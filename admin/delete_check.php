@@ -7,10 +7,11 @@
     require('../dbconnect.php');
     
     if (isset($_POST['erasure'])){
-          $db->query("DELETE FROM books".$_SESSION["delete_id"]);
-        header('Location: dustbox.php');
-        exit();
-    }
+            $db->query("DELETE FROM books".$_SESSION["delete_id"]);
+            $_SESSION["delete_message"] = "ゴミ箱から消去しました。";
+            header('Location: dustbox.php');
+            exit();
+        }
     $checks = $_SESSION['delete'];
     $sql = 'SELECT title, pict_path from books';
     $id;

@@ -11,8 +11,11 @@
     header('Location: books.php');
     exit();
     }
+$genre_id = 'SELECT * FROM genre WHERE genre_id = '.$book['genre_id'];    
+$genres = $db->query($genre_id);
 ?>
 <DOCTYPE html>
+    <h1>詳細画面</h1>
     <body>
         <dl>
             <dt>タイトル</dt>
@@ -50,13 +53,19 @@
             </dd>
             <dt>ジャンル</dt>
             <dd>
-                <?php echo $book['genre']; ?>
+                <?php 
+                    $genre = $genres->fetch();
+                    echo $genre["genre_name"]; 
+                ?>
             </dd>
             <dt>表紙画像</dt>
             <dd>
                 <img src="../pict/<?php echo $book['pict_path']; ?>" width="auto" height="auto" alt="" />
                 <input type="button" value="閲覧" onclick="location.href='../pdf/<?php echo $book['pdf_path']; ?>'"/>
             </dd>  
+            <dl>
+                <input type="button" value="ホームへ戻る" onclick="location.href='books.php'">
+            </dl>
         </dl>
     </body>
 </html>

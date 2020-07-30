@@ -4,8 +4,6 @@
 ini_set('display_errors', "Off");
 require('../dbconnect.php');
 
-
-
 if (isset($_POST['rest'])){
     $_SESSION["rest"] = $_POST["check"];  
     header('Location: rest_check.php');
@@ -15,10 +13,23 @@ if (isset($_POST['rest'])){
     header('Location: delete_check.php');
     exit();
 }
+
+if(isset($_SESSION['rest_message'])){
+    $message = $_SESSION['rest_message'];
+    unset($_SESSION['rest_message']);
+}else if(isset($_SESSION['delete_message'])){
+    $message = $_SESSION['delete_message'];
+    unset($_SESSION['delete_message']);
+}
+
+
+
 $posts = $db->query('SELECT * FROM books WHERE dust_flug IN (1) ORDER BY id ASC');
 ?>
 
 <body>
+<h1>ゴミ箱</h1>    
+<h2><?php echo $message;?></h2>
 <?php
     foreach ($posts as $post):
 ?>
