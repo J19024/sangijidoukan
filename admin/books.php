@@ -3,6 +3,7 @@
 require('../dbconnect.php');
 // エラーを出力させない
 ini_set('display_errors', "Off");
+session_start();
 if (!empty($_POST)) {
 	// エラー項目の確認
 	if ($_POST['title'] == '') {
@@ -47,10 +48,17 @@ if (!empty($_REQUEST['id'])){
        $statement->execute(array(
         $_REQUEST['id']
         ));
+    $message = "ゴミ箱に移動しました。";
 }
-
+//作業完了のメッセージ
+if(!empty($_SESSION['update'])){
+    $message = $_SESSION['update']; 
+    unset($_SESSION['update']);
+}
 //DBから書籍情報の取得
 $posts = $db->query('SELECT id, title, pict_path, dust_flug FROM books WHERE dust_flug NOT IN (1) ORDER BY id ASC');
+$genres = $db->query('SELECT genre_id, genre_name FROM genre');
+
 
 //書き直し処理
 if ($_REQUEST["action"] == "rewrite") {
@@ -113,6 +121,9 @@ header {
     </div>
     </h1>
 </header>
+      <h1><?php echo $message; $message='';?></h1>
+    <input  type="button" value="ゴミ箱へ" onclick="location.href='dustbox.php'">&nbsp;
+    <input  type="button" value="ジャンル追加" onclick="location.href='genre_add.php'">
 <div id="app">
     <v-app>
     <?php if ($error['login'] == 'blank'): ?>
@@ -163,15 +174,14 @@ header {
                     required
                   ></v-text-field>
 
-                  <v-text-field
-                    name="genre"
-                    prepend-icon="mdi-account-circle"
-                    v-model="publisher"
-                    :rules="nameRules"
-                    :counter="35"
-                    label="ジャンル"
-                    required
-                  ></v-text-field>
+                 <dt>ジャンル<span class="required"></span></dt>
+            <dd>
+                <select name="genre_id">
+                    <?php foreach($genres as $genre): ?>
+                    <option value="<?php echo $genre['genre_id'];?>"><?php echo $genre['genre_name']; ?></option>
+                    <?php endforeach ?>
+                </select>
+            </dd>
 
                   <v-text-field
                     type="date"
