@@ -57,6 +57,7 @@
     }
 ?>
 <!DOCTYPE html>
+    <h1>編集画面</h1>
     <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="id" value="<?php echo $id; ?>">
         <dl>

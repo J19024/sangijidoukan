@@ -10,11 +10,10 @@
         header('Location: books.php');
         exit();
     }
-
     //DBに値を格納する
     if (!empty($_POST)){
         $statement = $db->prepare("INSERT INTO books SET title=?, author=?, publication=?, explanation=?, publisher=?,
-                                    age=?, pict_path=?, pdf_path=?, genre=?, created=NOW(), updated=NOW()");
+                                    age=?, pict_path=?, pdf_path=?, genre_id=?, created=NOW(), updated=NOW()");
        $statement->execute(array(
             $_SESSION['join']['title'],
             $_SESSION['join']['author'],
@@ -24,13 +23,15 @@
             $_SESSION['join']['age'],
             $_SESSION['join']['pict'],
             $_SESSION['join']['pdf'],
-            $_SESSION['join']['genre']
+            $_SESSION['join']['genre_id']
         ));
         unset($_SESSION['join']);
     
         header('Location: books.php');
         exit();
     }
+    $genre_id = 'SELECT * FROM genre WHERE genre_id = '.$_SESSION['join']['genre_id'];
+    $genres = $db->query($genre_id);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -76,7 +77,11 @@
             </dd>
             <dt>ジャンル</dt>
             <dd>
-                <?php echo htmlspecialchars($_SESSION['join']['genre'], ENT_QUOTES); ?>
+                <?php 
+                $genre = $genres->fetch();
+                echo $genre["genre_name"];
+                    
+                 ?>
             </dd>
             <dt>表紙画像</dt>
             <dd>

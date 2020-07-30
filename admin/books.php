@@ -3,6 +3,7 @@
 require('../dbconnect.php');
 // エラーを出力させない
 ini_set('display_errors', "Off");
+session_start();
 if (!empty($_POST)) {
 	// エラー項目の確認
 	if ($_POST['title'] == '') {
@@ -47,10 +48,17 @@ if (!empty($_REQUEST['id'])){
        $statement->execute(array(
         $_REQUEST['id']
         ));
+    $message = "ゴミ箱に移動しました。";
 }
-
+//作業完了のメッセージ
+if(!empty($_SESSION['update'])){
+    $message = $_SESSION['update']; 
+    unset($_SESSION['update']);
+}
 //DBから書籍情報の取得
 $posts = $db->query('SELECT id, title, pict_path, dust_flug FROM books WHERE dust_flug NOT IN (1) ORDER BY id ASC');
+$genres = $db->query('SELECT genre_id, genre_name FROM genre');
+
 
 //書き直し処理
 if ($_REQUEST["action"] == "rewrite") {
@@ -59,11 +67,10 @@ if ($_REQUEST["action"] == "rewrite") {
 }
 ?>
 <!DOCTYPE html>
-<head>
-    
-</head>
 <body>
-    <input  type="button" value="ゴミ箱へ" onclick="location.href='dustbox.php'">
+    <h1><?php echo $message; $message='';?></h1>
+    <input  type="button" value="ゴミ箱へ" onclick="location.href='dustbox.php'">&nbsp;
+    <input  type="button" value="ジャンル追加" onclick="location.href='genre_add.php'">
     <p>追加する書籍のデータを入力してください。</p>
     <form action="" method="post" enctype="multipart/form-data">
         <dl>
@@ -113,14 +120,17 @@ if ($_REQUEST["action"] == "rewrite") {
             </dd>
 
             <dt>ジャンル<span class="required"></span></dt>
-            <dd><input type="varchar" name="genre" size="35" maxlength="255"
-                 value="<?php echo htmlspecialchars($_POST["genre"], ENT_QUOTES); ?>"
-                />
+            <dd>
+                <select name="genre_id">
+                    <?php foreach($genres as $genre): ?>
+                    <option value="<?php echo $genre['genre_id'];?>"><?php echo $genre['genre_name']; ?></option>
+                    <?php endforeach ?>
+                </select>
             </dd>
             <dt>表紙画像<span class="required">必須</span></dt>
             <dd>
                 <input class="registerFile" type="file" name="pict" required>
-                <?php if($error['pict'] == 'type1'): ?>
+                <?php if($error['pict'] == 'type'): ?>
                     <p class="error">画像は「.jpg」または「.png」を指定してください</p>
       			<?php endif; ?>
             </dd>

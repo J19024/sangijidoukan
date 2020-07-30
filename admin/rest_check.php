@@ -7,9 +7,10 @@
     require('../dbconnect.php');
     
     if (isset($_POST['reviv'])){
-          $db->query("UPDATE books SET dust_flug=0".$_SESSION["rect_id"]);
-        header('Location: dustbox.php');
-        exit();
+            $db->query("UPDATE books SET dust_flug=0".$_SESSION["rect_id"]);
+            $_SESSION["rest_message"] = "ゴミ箱から復元しました。";
+            header('Location: dustbox.php');
+            exit();
     }
     $checks = $_SESSION['rest'];
     $sql = 'SELECT title, pict_path from books';
