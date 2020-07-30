@@ -11,7 +11,7 @@
     }
     if (!empty($_POST)){
         $statement = $db->prepare("UPDATE books SET title=?, author=?, publication=?, explanation=?, publisher=?,
-                                    age=?, pict_path=?, pdf_path=?, genre=?, updated=NOW() WHERE id=?");
+                                    age=?, pict_path=?, pdf_path=?, genre_id=?, updated=NOW() WHERE id=?");
        $statement->execute(array(
             $_SESSION['join']['title'],
             $_SESSION['join']['author'],
@@ -21,7 +21,7 @@
             $_SESSION['join']['age'],
             $_SESSION['join']['pict'],
             $_SESSION['join']['pdf'],
-            $_SESSION['join']['genre'],
+            $_SESSION['join']['genre_id'],
             
             $_SESSION['join']['id']
         ));
@@ -30,6 +30,7 @@
         header('Location: books.php');
         exit();
     }
+    $genres = $db->query('SELECT genre_id, genre_name FROM genre WHERE genre_id='.$_SESSION['genre_id']);
 ?>
 
 <form action="" method="post">
@@ -64,7 +65,7 @@
 
         <dt>ジャンル</dt>
         <dd>
-            <?php echo htmlspecialchars($_SESSION['join']['genre'], ENT_QUOTES); ?>
+            <?php echo htmlspecialchars($_SESSION['genre_id'], ENT_QUOTES); ?>
         </dd>
 
         <dt>表紙画像</dt>
