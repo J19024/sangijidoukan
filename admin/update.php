@@ -55,6 +55,7 @@
         $_POST = $_SESSION["join"];
         $error["rewrite"] = true;
     }
+    $genres = $db->query('SELECT genre_id, genre_name FROM genre');
 ?>
 <!DOCTYPE html>
     <h1>編集画面</h1>
@@ -100,7 +101,11 @@
 
             <dt>ジャンル<span></span></dt>
             <dd>
-                <input type="varchar" name="genre" size="35" maxlength="255" value="<?php echo $book["genre"], htmlspecialchars($_POST["genre"], ENT_QUOTES); ?>" />
+                <select name="genre_id">
+                    <?php foreach($genres as $genre): ?>
+                    <option value="<?php echo $genre['genre_id'];?>"><?php echo $genre['genre_name']; ?></option>
+                    <?php endforeach ?>
+                </select>
             </dd>
 
             <img src="../pict/<?php echo $book['pict_path']; ?>" width="48" height="64" alt="<?php echo $post['title']; ?>" />
