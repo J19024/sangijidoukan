@@ -99,7 +99,7 @@ header {
 }
 
 .unchii {
-  width:auto;
+  width:300px;
   margin-right: auto;
   margin-left: auto;
 }
@@ -118,20 +118,19 @@ header {
   	<h1 class="headline">
     <div class="unchii">
       <a>サンギジドウカン</a>
-    </div>
+    
     </h1>
+    <div class="unchii">
+      　　<input  type="button" value="ゴミ箱へ" onclick="location.href='dustbox.php'">&nbsp;
+      <input  type="button" value="ジャンル追加" onclick="location.href='genre_add.php'">
+    </div>
+    </div>
 </header>
+
       <h1><?php echo $message; $message='';?></h1>
-    <input  type="button" value="ゴミ箱へ" onclick="location.href='dustbox.php'">&nbsp;
-    <input  type="button" value="ジャンル追加" onclick="location.href='genre_add.php'">
+
 <div id="app">
     <v-app>
-    <?php if ($error['login'] == 'blank'): ?>
-            <p class="error">* メールアドレスとパスワードをご記入ください</p>
-            <?php endif; ?>
-            <?php if ($error['login'] == 'failed'): ?>
-            <p class="error">* ログインに失敗しました。正しくご記入ください。</p>
-    <?php endif; ?>
     <v-row>
           <v-col>
       <v-card width="700px" class="mx-auto mt-5">
@@ -174,21 +173,19 @@ header {
                     required
                   ></v-text-field>
 
-                 <dt>ジャンル<span class="required"></span></dt>
-            <dd>
-                <select name="genre_id">
-                    <?php foreach($genres as $genre): ?>
-                    <option value="<?php echo $genre['genre_id'];?>"><?php echo $genre['genre_name']; ?></option>
-                    <?php endforeach ?>
-                </select>
-            </dd>
-
                   <v-text-field
                     type="date"
                     name="publication"
                     label="出版日"
                  >
                  </v-text-field>
+
+                 <h5>ジャンル:</h5>
+                  <select  name="genre_id">
+                        <?php foreach($genres as $genre): ?>
+                        <option value="<?php echo $genre['genre_id'];?>"><?php echo $genre['genre_name']; ?></option>
+                        <?php endforeach ?>
+                  </select>
         </v-col>
         <v-col>
                   <v-file-input
@@ -250,6 +247,8 @@ header {
                 </v-row>
                 </v-col>
             </v-row>
+            
+            
             </v-container>
             <v-card-actions>
               <v-btn class="info" type="submit">確認</v-btn>
@@ -321,7 +320,6 @@ header {
       ?>
       </v-app>
   </div>
-
 <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
 <link rel='stylesheet' href='https://unpkg.com/v-calendar/lib/v-calendar.min.css'>
