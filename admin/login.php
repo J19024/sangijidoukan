@@ -39,40 +39,68 @@ if (!empty($_POST)) {
 </head>
 
 <body>
-  <?php echo $SESSION['user_id'];$SESSION['password']; ?>
-  <th>
-    <?php echo $TEST;?> 
-<div id="wrap">
-  <div id="head">
-    <h1>ログインする</h1>
+  <div id="app">
+    <v-app>
+    <?php if ($error['login'] == 'blank'): ?>
+            <p class="error">* メールアドレスとパスワードをご記入ください</p>
+            <?php endif; ?>
+            <?php if ($error['login'] == 'failed'): ?>
+            <p class="error">* ログインに失敗しました。正しくご記入ください。</p>
+    <?php endif; ?>
+      <v-card width="400px" class="mx-auto mt-5">
+        <v-card-title>
+          <h1 class="display-1">ログイン</h1>
+        </v-card-title>
+        
+        <v-card-text>
+        <v-form v-model="valid" ref='form' action="" method="post">
+          <v-container>
+                  <v-text-field
+                    name="user_id"
+                    prepend-icon="mdi-account-circle"
+                    v-model="user_id"
+                    :rules="nameRules"
+                    :counter="50"
+                    label="ユーザ名"
+                    required
+                  ></v-text-field>
+
+                  <v-text-field
+                    name="password"
+                    type="password"
+                    v-model="lastname"
+                    :rules="nameRules"
+                    :counter="50"
+                    label="パスワード"
+                    v-bind:type="showPassword ? 'text' : 'password'" 
+                    prepend-icon="mdi-lock" 
+                    append-icon="mdi-eye-off"
+                    v-bind:append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                    @click:append="showPassword = !showPassword"
+                    required
+                  ></v-text-field>
+            </v-container>
+            <v-card-actions>
+              <v-btn class="info" type="submit">ログイン</v-btn>
+            </v-card-actions>
+          </v-form>
+        </v-card-text>
+      </v-card>
+    </v-app>
   </div>
-  <div id="content">
-    <div id="lead">
-      <p>IDとパスワードを記入してログインしてください。</p>
-    </div>
-    <form action="" method="post">
-      <dl>
-        <dt>ID</dt>
-        <dd>
-          <input type="text" name="user_id" size="35" maxlength="255" value="<?php echo htmlspecialchars($_POST['user_id']); ?>" />
-          <?php if ($error['login'] == 'blank'): ?>
-          <p class="error">* メールアドレスとパスワードをご記入ください</p>
-          <?php endif; ?>
-          <?php if ($error['login'] == 'failed'): ?>
-          <p class="error">* ログインに失敗しました。正しくご記入ください。</p>
-          <?php endif; ?>
-        </dd>
-        <dt>パスワード</dt>
-        <dd>
-          <input type="password" name="password" size="35" maxlength="255" value="<?php echo htmlspecialchars($_POST['password']); ?>" />
-          </dd>
-      </dl>
-      <div>
-        <input type="submit" value="ログインする" />
-      </div>
-      <div><input type="button" value="児童画面へ" /></div>
-    </form>
-  </div>
-</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+<script>
+    new Vue({
+      el: '#app',
+      vuetify: new Vuetify(),
+      data: () => ({
+        showPassword : false
+      })
+    })
+</script>
+
+<div><input type="button" value="児童画面へ" /></div>
 </body>
 </html>
